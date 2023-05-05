@@ -1,0 +1,31 @@
+{
+  "name": "express-mesto-server",
+  "version": "1.0.0",
+  "description": "[![Tests](../../actions/workflows/tests-13-sprint.yml/badge.svg)](../../actions/workflows/tests-13-sprint.yml) [![Tests](../../actions/workflows/tests-14-sprint.yml/badge.svg)](../../actions/workflows/tests-14-sprint.yml)\r # Проект Mesto фронтенд + бэкенд\r Выполнен Сергеем Сапёровым в рамках учёбы в когорте 58",
+  "main": "index.js",
+  "scripts": {
+    "lint": "npx eslint",
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/skalolaz2012/express-mesto-gha.git"
+  },
+  "keywords": [],
+  "author": "Сергей Сапёров",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/skalolaz2012/express-mesto-gha/issues"
+  },
+  "homepage": "https://github.com/skalolaz2012/express-mesto-gha#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "nodemon": "^2.0.22"
+  },
+  "devDependencies": {
+    "eslint": "^8.39.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.27.5"
+  }
+}
