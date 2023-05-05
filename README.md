@@ -1,5 +1,6 @@
 [![Tests](../../actions/workflows/tests-13-sprint.yml/badge.svg)](../../actions/workflows/tests-13-sprint.yml) [![Tests](../../actions/workflows/tests-14-sprint.yml/badge.svg)](../../actions/workflows/tests-14-sprint.yml)
 # Проект Mesto фронтенд + бэкенд
+Выполнен Сергеем Сапёровым в рамках учёбы в когорте 58
 
 [Ссылка на репозиторий](https://github.com/skalolaz2012/express-mesto-gha)
 
