@@ -1,3 +1,5 @@
+const usersRouter = require('express').Router();
+
 const {
   getAllUsers,
   getUser,
@@ -5,8 +7,6 @@ const {
   editUser,
   changeAvatar,
 } = require('../controllers/users');
-
-const usersRouter = require('express').Router();
 
 usersRouter.get('/', getAllUsers);
 usersRouter.get('/:userId', getUser);
