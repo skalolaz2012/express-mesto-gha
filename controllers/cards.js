@@ -1,5 +1,5 @@
 /* экспортируем модель со схемой в контроллер */
-const Card = require("../models/card");
+const Card = require('../models/card');
 
 const getCards = (req, res) => {
   Card.find({})

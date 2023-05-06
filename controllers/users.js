@@ -1,5 +1,5 @@
 /* экспортируем модель со схемой в контроллер */
-const User = require("../models/user");
+const User = require('../models/user');
 
 const getAllUsers = (req, res) => {
   User.find({})
