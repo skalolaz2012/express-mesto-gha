@@ -20,12 +20,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use((err, req, res, next) => {
-  console.log('congrats you hit the error middleware');
-  console.log(err);
-});
-
 app.use(router);
 
 /* прослушивание порта из первого параметра и колбэк, который выполнится при запуске приложения */
-app.listen(3001, () => {});
+app.listen(3000, () => {});
