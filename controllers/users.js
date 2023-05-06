@@ -33,6 +33,18 @@ const createUser = (req, res) => {
     });
 };
 
+// catch(err => {
+//   if (err.name === 'ValidationError') {
+//   next(err)
+//   } else {
+//   next(err)
+//   }
+//   })
+
+//   if (err.message && ~err.message.indexOf('Cast to ObjectId failed')) {
+//     res.sendStatus(404)
+//   }
+
 const editUser = (req, res) => {
   const { name, about } = req.body;
   User.findByIdAndUpdate(req.user._id, { name, about })
