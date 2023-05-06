@@ -11,6 +11,16 @@ mongoose.connect('mongodb://127.0.0.1/mestodb');
 /* метод use позволяет использовать middleware */
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+
+app.use((req, res, next) => {
+  req.user = {
+    _id: '645621d3366c7241e97c28c3'
+  };
+
+  next();
+});
+
 app.use(router);
 
 /* прослушивание порта из первого параметра и колбэк, который выполнится при запуске приложения */
