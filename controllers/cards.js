@@ -29,7 +29,10 @@ const deleteCard = (req, res) => {
 
   Card.findById(id)
     .then((card) => {
-      res.send(card);
+      if (!card) {
+        return next(res.status(errors.NOT_FOUND).send(errors.errMsgNotFound));
+      }
+      return card.remove().then(res.send({ message: 'карточка удалена' }));
     })
     .catch((err) => {
       res.status(400).send(err);
@@ -43,7 +46,10 @@ const likeCard = (req, res) => {
     { new: true },
   )
     .then((card) => {
-      res.send(card);
+      if (!card) {
+        return next(res.status(errors.NOT_FOUND).send(errors.errMsgNotFound));
+      }
+      return res.send(card);
     })
     .catch((err) => {
       res.status(400).send(err);
@@ -57,7 +63,10 @@ const dislikeCard = (req, res) => {
     { new: true },
   )
     .then((card) => {
-      res.send(card);
+      if (!card) {
+        return next(res.status(errors.NOT_FOUND).send(errors.errMsgNotFound));
+      }
+      return res.send(card);
     })
     .catch((err) => {
       res.status(400).send(err);

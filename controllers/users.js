@@ -17,7 +17,6 @@ const getUser = (req, res, next) => {
   const { userId } = req.params;
   User.findById(userId)
     .then((user) => {
-      console.log(1);
       if (!user) {
         return next(res.status(errors.NOT_FOUND).send(errors.errMsgNotFound));
       }
@@ -41,7 +40,7 @@ const createUser = (req, res) => {
 
 const editUser = (req, res) => {
   const { name, about } = req.body;
-  User.findByIdAndUpdate(req.user._id, { name, about })
+  User.findByIdAndUpdate(req.user._id, { name, about }, { new: true })
     .then((user) => {
       res.send({ user });
     })
@@ -52,7 +51,7 @@ const editUser = (req, res) => {
 
 const changeAvatar = (req, res) => {
   const { avatar } = req.body;
-  User.findByIdAndUpdate(req.user._id, { avatar })
+  User.findByIdAndUpdate(req.user._id, { avatar }, { new: true })
     .then((user) => {
       res.send({ user });
     })
