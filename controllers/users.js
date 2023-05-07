@@ -15,6 +15,9 @@ const getUser = (req, res) => {
   const { userId } = req.params;
   User.findById(userId)
     .then((user) => {
+      if (!user) {
+        res.status(404).send(err);
+      }
       res.send({ user });
     })
     .catch((err) => {
