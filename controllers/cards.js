@@ -34,7 +34,7 @@ const deleteCard = (req, res, next) => {
       if (!card) {
         return next(res.status(errors.NOT_FOUND).send(errors.errMsgNotFound));
       }
-      return card.remove().then(res.send({ message: 'карточка удалена' }));
+      return card.remove().then(() => res.send({ message: 'карточка удалена' }));
     })
     .catch((err) => {
       res.status(400).send(err);
