@@ -29,12 +29,12 @@ const createCard = (req, res) => {
 const deleteCard = (req, res, next) => {
   const { id } = req.params;
 
-  Card.findById(id)
+  Card.deleteOne({ _id: id })
     .then((card) => {
       if (!card) {
-        return next(res.status(errors.BAD_REQUEST).send(errors.errMsgNotFound));
+        return next(res.status(errors.NOT_FOUND).send(errors.errMsgNotFound));
       }
-      return res.send({ card, message: 'карточка удалена' });
+      return res.send({ message: 'карточка удалена' });
     })
     .catch((err) => {
       res.status(400).send(err);
