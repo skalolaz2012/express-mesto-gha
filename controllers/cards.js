@@ -1,6 +1,8 @@
 /* экспортируем модель со схемой в контроллер */
 const Card = require('../models/card');
 
+const errors = require('../errors');
+
 const getCards = (req, res) => {
   Card.find({})
     .then((cards) => {
@@ -24,7 +26,7 @@ const createCard = (req, res) => {
     });
 };
 
-const deleteCard = (req, res) => {
+const deleteCard = (req, res, next) => {
   const { id } = req.params;
 
   Card.findById(id)
@@ -39,7 +41,7 @@ const deleteCard = (req, res) => {
     });
 };
 
-const likeCard = (req, res) => {
+const likeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
@@ -56,7 +58,7 @@ const likeCard = (req, res) => {
     });
 };
 
-const dislikeCard = (req, res) => {
+const dislikeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $pull: { likes: req.user._id } }, // убрать _id из массива
