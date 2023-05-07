@@ -19,6 +19,15 @@ app.use((req, res, next) => {
 
   next();
 });
+app.use(function(req, res, next){
+  res.render('404', { status: 404, url: req.url });
+});
+app.use(function(err, req, res, next){
+  res.render('500', {
+      status: err.status || 500
+    , error: err
+  });
+});
 
 app.use(router);
 
