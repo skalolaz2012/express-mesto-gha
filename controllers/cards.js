@@ -27,14 +27,14 @@ const createCard = (req, res) => {
 };
 
 const deleteCard = (req, res, next) => {
-  const { id } = req.params;
+  const { cardId } = req.params;
 
-  Card.deleteOne({ _id: id })
+  Card.deleteOne({ _id: cardId })
     .then((card) => {
-      if (!card) {
+      if (card.deletedCount === 0) {
         return next(res.status(errors.NOT_FOUND).send(errors.errMsgNotFound));
       }
-      return res.send({ message: 'карточка удалена' });
+      return res.send({ card, message: 'карточка удалена' });
     })
     .catch((err) => {
       res.status(400).send(err);
