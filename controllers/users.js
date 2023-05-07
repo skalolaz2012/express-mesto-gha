@@ -1,7 +1,7 @@
 /* экспортируем модель со схемой в контроллер */
 const User = require('../models/user');
 
-const errors = require('../errors')
+const errors = require('../errors');
 
 const getAllUsers = (req, res) => {
   User.find({})
@@ -13,12 +13,15 @@ const getAllUsers = (req, res) => {
     });
 };
 
-const getUser = (req, res) => {
+const getUser = (req, res, next) => {
   const { userId } = req.params;
   User.findById(userId)
     .then((user) => {
-      errors(user, res);
-      res.send({ user });
+      console.log(1);
+      if (!user) {
+        return next(res.status(errors.NOT_FOUND).send(errors.errMsgNotFound));
+      }
+      return res.send({ user });
     })
     .catch((err) => {
       res.status(400).send(err);
@@ -35,18 +38,6 @@ const createUser = (req, res) => {
       res.status(400).send(err);
     });
 };
-
-// catch(err => {
-//   if (err.name === 'ValidationError') {
-//   next(err)
-//   } else {
-//   next(err)
-//   }
-//   })
-
-//   if (err.message && ~err.message.indexOf('Cast to ObjectId failed')) {
-//     res.sendStatus(404)
-//   }
 
 const editUser = (req, res) => {
   const { name, about } = req.body;
