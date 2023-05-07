@@ -7,7 +7,7 @@ const cardsRouter = require('./cards');
 router.use('/users', usersRouter);
 router.use('/cards', cardsRouter);
 router.patch('*', (req, res) => {
-  res.send('запрашиваемой страницы не существует', 404);
+  res.send({ message: 'запрашиваемой страницы не существует' }, 404);
 });
 
 module.exports = router;
