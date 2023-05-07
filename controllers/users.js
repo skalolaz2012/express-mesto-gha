@@ -1,6 +1,8 @@
 /* экспортируем модель со схемой в контроллер */
 const User = require('../models/user');
 
+const errors = require('../errors')
+
 const getAllUsers = (req, res) => {
   User.find({})
     .then((users) => {
@@ -15,9 +17,7 @@ const getUser = (req, res) => {
   const { userId } = req.params;
   User.findById(userId)
     .then((user) => {
-      if (!user) {
-        res.status(404).send(err);
-      }
+      errors(user, res);
       res.send({ user });
     })
     .catch((err) => {
