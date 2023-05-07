@@ -19,9 +19,6 @@ app.use((req, res, next) => {
 
   next();
 });
-app.use((req, res) => {
-  res.render('404', { status: 404, url: req.url });
-});
 
 app.use(router);
 
