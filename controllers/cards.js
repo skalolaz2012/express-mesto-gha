@@ -1,7 +1,7 @@
 /* экспортируем модель со схемой в контроллер */
 const Card = require('../models/card');
 
-const errors = require('../errors');
+const conditions = require('../utils/conditions');
 
 const getCards = (req, res) => {
   Card.find({})
@@ -9,7 +9,7 @@ const getCards = (req, res) => {
       res.send(cards);
     })
     .catch((err) => {
-      res.status(400).send(err);
+      conditions.sortErrors(err, res);
     });
 };
 
@@ -19,10 +19,10 @@ const createCard = (req, res) => {
 
   Card.create({ name, link, owner })
     .then((newCard) => {
-      res.send(newCard);
+      res.status(conditions.CREATED).send(newCard);
     })
     .catch((err) => {
-      res.status(400).send(err);
+      conditions.sortErrors(err, res);
     });
 };
 
@@ -37,7 +37,7 @@ const deleteCard = (req, res, next) => {
       return res.send({ card, message: 'карточка удалена' });
     })
     .catch((err) => {
-      res.status(400).send(err);
+      conditions.sortErrors(err, res);
     });
 };
 
@@ -45,16 +45,13 @@ const likeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
-    { new: true },
+    { new: true }
   )
     .then((card) => {
-      if (!card) {
-        return next(res.status(errors.NOT_FOUND).send(errors.errMsgNotFound));
-      }
-      return res.send(card);
+      conditions.checkData(card, res);
     })
     .catch((err) => {
-      res.status(400).send(err);
+      conditions.sortErrors(err, res);
     });
 };
 
@@ -62,16 +59,13 @@ const dislikeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $pull: { likes: req.user._id } }, // убрать _id из массива
-    { new: true },
+    { new: true }
   )
     .then((card) => {
-      if (!card) {
-        return next(res.status(errors.NOT_FOUND).send(errors.errMsgNotFound));
-      }
-      return res.send(card);
+      conditions.checkData(card, res);
     })
     .catch((err) => {
-      res.status(400).send(err);
+      conditions.sortErrors(err, res);
     });
 };
 

@@ -1,7 +1,7 @@
 /* экспортируем модель со схемой в контроллер */
 const User = require('../models/user');
 
-const errors = require('../errors');
+const conditions = require('../utils/conditions');
 
 const getAllUsers = (req, res) => {
   User.find({})
@@ -9,21 +9,18 @@ const getAllUsers = (req, res) => {
       res.send(users);
     })
     .catch((err) => {
-      res.status(400).send(err);
+      conditions.sortErrors(err, res);
     });
 };
 
-const getUser = (req, res, next) => {
+const getUser = (req, res) => {
   const { userId } = req.params;
   User.findById(userId)
     .then((user) => {
-      if (!user) {
-        return next(res.status(errors.NOT_FOUND).send(errors.errMsgNotFound));
-      }
-      return res.send({ user });
+      conditions.checkData(user, res);
     })
     .catch((err) => {
-      res.status(400).send(err);
+      conditions.sortErrors(err, res);
     });
 };
 
@@ -31,32 +28,40 @@ const createUser = (req, res) => {
   const { name, about, avatar } = req.body;
   User.create({ name, about, avatar })
     .then((newUser) => {
-      res.send(newUser);
+      res.status(conditions.CREATED).send(newUser);
     })
     .catch((err) => {
-      res.status(400).send(err);
+      conditions.sortErrors(err, res);
     });
 };
 
 const editUser = (req, res) => {
   const { name, about } = req.body;
-  User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
+  User.findByIdAndUpdate(
+    req.user._id,
+    { name, about },
+    { new: true, runValidators: true }
+  )
     .then((user) => {
       res.send({ user });
     })
     .catch((err) => {
-      res.status(400).send(err);
+      conditions.sortErrors(err, res);
     });
 };
 
 const changeAvatar = (req, res) => {
   const { avatar } = req.body;
-  User.findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
+  User.findByIdAndUpdate(
+    req.user._id,
+    { avatar },
+    { new: true, runValidators: true }
+  )
     .then((user) => {
       res.send({ user });
     })
     .catch((err) => {
-      res.status(400).send(err);
+      conditions.sortErrors(err, res);
     });
 };
 
