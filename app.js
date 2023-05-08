@@ -2,8 +2,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const router = require('./routes');
 const helmet = require('helmet');
+const router = require('./routes');
 
 const app = express();
 
