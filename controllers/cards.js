@@ -50,9 +50,9 @@ const likeCard = (req, res) => {
     })
     .catch((err) => {
       if (err.message === 'DocumentNotFoundError') {
-        res.status(404).send({ message: 'указанного id нет' })
+        res.status(404).send({ message: 'указанного id нет' });
       } else {
-      conditions.sortErrors(err, res);
+        conditions.sortErrors(err, res);
       }
     });
 };
