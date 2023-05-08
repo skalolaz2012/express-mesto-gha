@@ -31,7 +31,7 @@ const createUser = (req, res) => {
       res.status(conditions.CREATED).send(user);
     })
     .catch((err) => {
-      conditions.sortErrors(err, res)
+      conditions.sortErrors(err, res);
     });
 };
 
