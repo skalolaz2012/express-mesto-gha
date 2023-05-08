@@ -44,8 +44,9 @@ const likeCard = (req, res) => {
     { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
     { new: true },
   )
+    .orFail(new Error('DocumentNotFoundError'))
     .then((card) => {
-      conditions.checkData(card, res);
+      res.send(card);
     })
     .catch((err) => {
       conditions.sortErrors(err, res);
