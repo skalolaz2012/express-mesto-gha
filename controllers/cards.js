@@ -19,7 +19,7 @@ const createCard = (req, res) => {
 
   Card.create({ name, link, owner })
     .then((newCard) => {
-      res.status(conditions.CREATED).send(newCard);
+      res.status(201).send(newCard);
     })
     .catch((err) => {
       conditions.sortErrors(err, res);
@@ -32,7 +32,7 @@ const deleteCard = (req, res, next) => {
   Card.deleteOne({ _id: cardId })
     .then((card) => {
       if (card.deletedCount === 0) {
-        return next(res.status(errors.NOT_FOUND).send(errors.errMsgNotFound));
+        return next(res.status(conditions.NOT_FOUND).send(conditions.errMsgNotFound));
       }
       return res.send({ card, message: 'карточка удалена' });
     })
@@ -41,11 +41,11 @@ const deleteCard = (req, res, next) => {
     });
 };
 
-const likeCard = (req, res, next) => {
+const likeCard = (req, res) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
-    { new: true }
+    { new: true },
   )
     .then((card) => {
       conditions.checkData(card, res);
@@ -55,11 +55,11 @@ const likeCard = (req, res, next) => {
     });
 };
 
-const dislikeCard = (req, res, next) => {
+const dislikeCard = (req, res) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $pull: { likes: req.user._id } }, // убрать _id из массива
-    { new: true }
+    { new: true },
   )
     .then((card) => {
       conditions.checkData(card, res);

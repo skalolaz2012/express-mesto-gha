@@ -27,11 +27,11 @@ const getUser = (req, res) => {
 const createUser = (req, res) => {
   const { name, about, avatar } = req.body;
   User.create({ name, about, avatar })
-    .then((newUser) => {
-      res.status(conditions.CREATED).send(newUser);
+    .then((user) => {
+      res.status(201).send(user);
     })
     .catch((err) => {
-      conditions.sortErrors(err, res);
+      conditions.sortErrors(err, res)
     });
 };
 
@@ -40,7 +40,7 @@ const editUser = (req, res) => {
   User.findByIdAndUpdate(
     req.user._id,
     { name, about },
-    { new: true, runValidators: true }
+    { new: true, runValidators: true },
   )
     .then((user) => {
       res.send({ user });
@@ -55,7 +55,7 @@ const changeAvatar = (req, res) => {
   User.findByIdAndUpdate(
     req.user._id,
     { avatar },
-    { new: true, runValidators: true }
+    { new: true, runValidators: true },
   )
     .then((user) => {
       res.send({ user });

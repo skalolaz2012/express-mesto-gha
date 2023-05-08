@@ -1,5 +1,3 @@
-const OK = 200;
-const CREATED = 201;
 const BAD_REQUEST = 400;
 const NOT_FOUND = 404;
 const INTERNAL_SERVER_ERROR = 500;
@@ -17,15 +15,20 @@ const checkData = (data, res) => {
 
 const sortErrors = (err, res) => {
   if (err.name === 'ValidationError') {
-    return res.status(BAD_REQUEST).send(errMsgBadRequest);
+    res.status(BAD_REQUEST).send(errMsgBadRequest);
+    return;
   }
   if (err.name === 'CastError') {
-    return res.status(BAD_REQUEST).send(errMsgBadRequest);
+    res.status(BAD_REQUEST).send(errMsgBadRequest);
+    return;
   }
   if (err.name === 'DocumentNotFoundError') {
-    return res.status(NOT_FOUND).send(errMsgNotFound);
+    res.status(NOT_FOUND).send(errMsgNotFound);
+    return;
+  } else {
+    res.status(INTERNAL_SERVER_ERROR).send(errMsgServer);
+    return;
   }
-  return res.status(INTERNAL_SERVER_ERROR).send(errMsgServer);
 };
 
 module.exports = {
