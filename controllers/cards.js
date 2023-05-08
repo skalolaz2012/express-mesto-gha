@@ -26,15 +26,12 @@ const createCard = (req, res) => {
     });
 };
 
-const deleteCard = (req, res, next) => {
+const deleteCard = (req, res) => {
   const { cardId } = req.params;
 
-  Card.deleteOne({ _id: cardId })
+  Card.findByIdAndRemove(cardId)
     .then((card) => {
-      if (card.deletedCount === 0) {
-        return next(res.status(conditions.NOT_FOUND).send(conditions.errMsgNotFound));
-      }
-      return res.send({ card, message: 'карточка удалена' });
+      conditions.checkData(card, res);
     })
     .catch((err) => {
       conditions.sortErrors(err, res);
