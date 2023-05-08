@@ -1,3 +1,4 @@
+const OK = 200;
 const CREATED = 201;
 const BAD_REQUEST = 400;
 const NOT_FOUND = 404;
@@ -11,7 +12,7 @@ const checkData = (data, res) => {
   if (!data) {
     return res.status(NOT_FOUND).send(errMsgNotFound);
   }
-  return res.status(CREATED).send(data);
+  return res.status(OK).send(data);
 };
 
 const sortErrors = (err, res) => {
