@@ -28,7 +28,7 @@ const createUser = (req, res) => {
   const { name, about, avatar } = req.body;
   User.create({ name, about, avatar })
     .then((user) => {
-      res.status(201).send(user);
+      res.status(conditions.CREATED).send(user);
     })
     .catch((err) => {
       conditions.sortErrors(err, res)

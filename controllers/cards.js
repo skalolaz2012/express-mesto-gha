@@ -19,7 +19,7 @@ const createCard = (req, res) => {
 
   Card.create({ name, link, owner })
     .then((newCard) => {
-      res.status(201).send(newCard);
+      res.status(conditions.CREATED).send(newCard);
     })
     .catch((err) => {
       conditions.sortErrors(err, res);

@@ -1,3 +1,4 @@
+const CREATED = 201;
 const BAD_REQUEST = 400;
 const NOT_FOUND = 404;
 const INTERNAL_SERVER_ERROR = 500;
@@ -24,14 +25,13 @@ const sortErrors = (err, res) => {
   }
   if (err.name === 'DocumentNotFoundError') {
     res.status(NOT_FOUND).send(errMsgNotFound);
-    return;
   } else {
     res.status(INTERNAL_SERVER_ERROR).send(errMsgServer);
-    return;
   }
 };
 
 module.exports = {
+  CREATED,
   checkData,
   sortErrors,
 };
