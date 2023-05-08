@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const router = require('./routes');
+const helmet = require('helmet');
 
 const app = express();
 
@@ -11,6 +12,7 @@ mongoose.connect('mongodb://127.0.0.1/mestodb');
 /* метод use позволяет использовать middleware */
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(helmet());
 
 app.use((req, res, next) => {
   req.user = {
