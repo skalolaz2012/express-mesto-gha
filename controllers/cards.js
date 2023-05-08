@@ -49,7 +49,11 @@ const likeCard = (req, res) => {
       res.send(card);
     })
     .catch((err) => {
+      if (err.message === 'DocumentNotFoundError') {
+        res.status(404).send({ message: 'указанного id нет' })
+      } else {
       conditions.sortErrors(err, res);
+      }
     });
 };
 

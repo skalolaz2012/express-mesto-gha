@@ -43,7 +43,7 @@ const editUser = (req, res) => {
     { new: true, runValidators: true },
   )
     .then((user) => {
-      res.send({ user });
+      conditions.checkData(user, res);
     })
     .catch((err) => {
       conditions.sortErrors(err, res);
@@ -58,7 +58,7 @@ const changeAvatar = (req, res) => {
     { new: true, runValidators: true },
   )
     .then((user) => {
-      res.send({ user });
+      conditions.checkData(user, res);
     })
     .catch((err) => {
       conditions.sortErrors(err, res);
