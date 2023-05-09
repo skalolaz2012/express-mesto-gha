@@ -6,7 +6,7 @@ const cardsRouter = require('./cards');
 /* роутеры аддитивные, к написанному в точке входа будут добавляться адреса-маршруты */
 router.use('/users', usersRouter);
 router.use('/cards', cardsRouter);
-router.patch('*', (req, res) => {
+router.use('*', (req, res) => {
   res.send({ message: 'запрашиваемой страницы не существует' }, 404);
 });
 

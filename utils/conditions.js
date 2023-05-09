@@ -16,16 +16,13 @@ const checkData = (data, res) => {
 };
 
 const sortErrors = (err, res) => {
-  if (err.name === 'ValidationError') {
+  if (err.name === 'ValidationError' || err.name === 'CastError') {
     res.status(BAD_REQUEST).send(errMsgBadRequest);
     return;
   }
-  if (err.name === 'CastError') {
-    res.status(BAD_REQUEST).send(errMsgBadRequest);
-    return;
-  }
-  if (err.name === 'DocumentNotFoundError') {
+  else if (err.name === 'DocumentNotFoundError') {
     res.status(NOT_FOUND).send(errMsgNotFound);
+    return;
   } else {
     res.status(INTERNAL_SERVER_ERROR).send(errMsgServer);
   }
