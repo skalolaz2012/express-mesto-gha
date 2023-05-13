@@ -26,7 +26,7 @@ const login = (req, res) => {
 
 const createUser = (req, res) => {
   const { name, about, avatar, email } = req.body;
-  // хешируем пароль
+  
   bcrypt
     .hash(req.body.password, 10)
     .then((hash) =>
