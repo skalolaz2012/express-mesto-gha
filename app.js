@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const router = require('./routes');
+const { login, createUser } = require('./controllers/users')
+const { auth } = require('./middlewares/auth')
 
 const app = express();
 

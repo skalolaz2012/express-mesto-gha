@@ -9,30 +9,35 @@ const login = (req, res) => {
   const { email, password } = req.body;
 
   User.findUserByCredentials(email, password)
-  .then((user) => {
-    // создадим токен
-    const token = jwt.sign({ _id: user._id }, 'some-very-or-not-secret-key',
-    { expiresIn: '7d' });
+    .then((user) => {
+      // создадим токен
+      const token = jwt.sign({ _id: user._id }, 'some-very-or-not-secret-key', {
+        expiresIn: '7d',
+      });
 
-    // вернём токен
-    res.send({ token });
-  })
-  .catch((err) => {
-    // ошибка аутентификации
-    res
-      .status(401)
-      .send({ message: err.message });
-  });
+      // вернём токен
+      res.send({ token });
+    })
+    .catch((err) => {
+      // ошибка аутентификации
+      res.status(401).send({ message: err.message });
+    });
 };
 
 const createUser = (req, res) => {
   const { name, about, avatar, email } = req.body;
   // хешируем пароль
-  bcrypt.hash(req.body.password, 10)
-    .then(hash => User.create({
-      name, about, avatar, email,
-      password: hash, // записываем хеш в базу
-    }))
+  bcrypt
+    .hash(req.body.password, 10)
+    .then((hash) =>
+      User.create({
+        name,
+        about,
+        avatar,
+        email,
+        password: hash, // записываем хеш в базу
+      })
+    )
     .then((user) => {
       res.status(conditions.CREATED).send(user);
     })
@@ -67,7 +72,7 @@ const editUser = (req, res) => {
   User.findByIdAndUpdate(
     req.user._id,
     { name, about },
-    { new: true, runValidators: true },
+    { new: true, runValidators: true }
   )
     .then((user) => {
       conditions.checkData(user, res);
@@ -82,7 +87,7 @@ const changeAvatar = (req, res) => {
   User.findByIdAndUpdate(
     req.user._id,
     { avatar },
-    { new: true, runValidators: true },
+    { new: true, runValidators: true }
   )
     .then((user) => {
       conditions.checkData(user, res);
