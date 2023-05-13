@@ -8,11 +8,11 @@ const errMsgNotFound = { message: 'id не существует' };
 const errMsgBadRequest = { message: 'Переданы неправильные данные' };
 const errMsgServer = { message: 'Ошибка сервера' };
 
-const checkData = (data, res) => {
+const checkData = (data, response, message) => {
   if (!data) {
-    return res.status(NOT_FOUND).send(errMsgNotFound);
+    return response.status(NOT_FOUND).send(errMsgNotFound);
   }
-  return res.status(OK).send(data);
+  return response.status(OK).send(data);
 };
 
 const sortErrors = (err, res) => {

@@ -14,13 +14,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(helmet());
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: '645621d3366c7241e97c28c3',
-  };
+app.post('/signin', login);
+app.post('/signup', createUser);
 
-  next();
-});
+// авторизация
+app.use(auth);
 
 app.use(router);
 

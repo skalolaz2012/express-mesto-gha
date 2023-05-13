@@ -3,15 +3,14 @@ const usersRouter = require('express').Router();
 const {
   getAllUsers,
   getUser,
-  createUser,
+  getYourself,
   editUser,
   changeAvatar,
 } = require('../controllers/users');
 
 usersRouter.get('/', getAllUsers);
 usersRouter.get('/:userId', getUser);
-/* по запросу post на маршруте  / выполнится функция колбэка */
-usersRouter.post('/', createUser);
+usersRouter.get('/me', getYourself);
 usersRouter.patch('/me', editUser);
 usersRouter.patch('/me/avatar', changeAvatar);
 
