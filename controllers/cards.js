@@ -29,7 +29,12 @@ const deleteCard = (req, res, next) => {
   const { cardId } = req.params;
 
   Card.findByIdAndRemove(cardId)
-    .then(() => {
+    .then((card) => {
+      if (!card) {
+        return next(new myError.NotFoundError(myError.NotFoundMsg));
+      } else if (!card.owner.equals(req.user._id)) {
+        return next(new myError.ForbiddenError(myError.ForbiddenMsg));
+      }
       res.send({ message: 'Удалено успешно' });
     })
     .catch(next);
