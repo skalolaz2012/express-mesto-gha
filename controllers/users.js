@@ -22,10 +22,10 @@ const getUserById = (req, res, next) => {
   User.findById(userId)
     .then((user) => {
       if (!user) {
-      throw new myError.NotFoundError('id нет');
-    }
-    return res.send(user);
-  })
+        throw new myError.NotFoundError('id нет');
+      }
+      return res.send(user);
+    })
     .catch(next);
 };
 
