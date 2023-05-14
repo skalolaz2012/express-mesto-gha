@@ -13,7 +13,7 @@ const createCard = (req, res, next) => {
   Card.create({
     name: req.body.name,
     link: req.body.link,
-    owner: req.user._id // используем req.user
+    owner: req.user._id, // используем req.user
   })
     .then((newCard) => {
       res.status(CREATED).send(newCard);

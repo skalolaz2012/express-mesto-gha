@@ -1,9 +1,6 @@
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 /* экспортируем модель со схемой в контроллер */
 const User = require('../models/user');
 const myError = require('../errors/errors');
-const { CREATED, jwtToken } = require('../utils/constants');
 
 const checkUser = (user, res) => {
   if (!user) {
@@ -38,7 +35,7 @@ const editUser = (req, res, next) => {
   User.findByIdAndUpdate(
     req.user._id,
     { name, about },
-    { new: true, runValidators: true }
+    { new: true, runValidators: true },
   )
     .then((user) => checkUser(user, res))
     .catch(next);
@@ -49,7 +46,7 @@ const changeAvatar = (req, res, next) => {
   User.findByIdAndUpdate(
     req.user._id,
     { avatar },
-    { new: true, runValidators: true }
+    { new: true, runValidators: true },
   )
     .then((user) => checkUser(user, res))
     .catch(next);
