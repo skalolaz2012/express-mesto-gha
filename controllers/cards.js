@@ -31,11 +31,11 @@ const deleteCard = (req, res, next) => {
   Card.findByIdAndRemove(cardId)
     .then((card) => {
       if (!card) {
-        return next(new myError.NotFoundError(myError.NotFoundMsg));
+        next(new myError.NotFoundError(myError.NotFoundMsg));
       } else if (!card.owner.equals(req.user._id)) {
         return next(new myError.ForbiddenError(myError.ForbiddenMsg));
       }
-      res.send({ message: 'Удалено успешно' });
+      return res.send({ message: 'Удалено успешно' });
     })
     .catch(next);
 };
@@ -46,8 +46,12 @@ const likeCard = (req, res, next) => {
     { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
     { new: true },
   )
+    .orFail(() => new myError.NotFoundError(myError.NotFoundMsg))
     .then((card) => {
-      res.send(card);
+      if (!card) {
+        return next(new myError.NotFoundError(myError.NotFoundMsg));
+      }
+      return res.send({card, message: 'Лайк!'});
     })
     .catch(next);
 };
