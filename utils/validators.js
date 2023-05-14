@@ -2,7 +2,7 @@ const { Joi } = require('celebrate');
 const { pattern } = require('./constants');
 
 const validateUser = {
-  body: Joi.object({
+  body: Joi.object().keys({
     name: Joi.string().min(2).max(30).messages({
       'string.min': 'Поле "Имя" не должно быть менее 2 символов',
       'string.max': 'Поле "Имя" не должно быть более 30 символов',
@@ -26,7 +26,7 @@ const validateUser = {
 };
 
 const validateEditUser = {
-  body: Joi.object({
+  body: Joi.object().keys({
     name: Joi.string().min(2).max(30).messages({
       'string.min': 'Поле "Имя" не должно быть менее 2 символов',
       'string.max': 'Поле "Имя" не должно быть более 30 символов',
