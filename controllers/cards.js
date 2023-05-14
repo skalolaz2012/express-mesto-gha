@@ -1,7 +1,6 @@
 /* экспортируем модель со схемой в контроллер */
 const Card = require('../models/card');
 const myError = require('../errors/errors');
-const { CREATED } = require('../utils/constants');
 
 const getCards = (req, res, next) => {
   Card.find({})
@@ -16,7 +15,7 @@ const createCard = (req, res, next) => {
     owner: req.user._id, // используем req.user
   })
     .then((newCard) => {
-      res.status(CREATED).send(newCard);
+      res.status(201).send(newCard);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -30,7 +29,6 @@ const deleteCard = (req, res, next) => {
   const { cardId } = req.params;
 
   Card.findByIdAndRemove(cardId)
-    .orFail(new myError.NotFoundError(myError.NotFoundMsg))
     .then(() => {
       res.send({ message: 'Удалено успешно' });
     })
@@ -43,7 +41,6 @@ const likeCard = (req, res, next) => {
     { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
     { new: true },
   )
-    .orFail(new myError.NotFoundError(myError.NotFoundMsg))
     .then((card) => {
       res.send(card);
     })
