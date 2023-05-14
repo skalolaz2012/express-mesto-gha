@@ -51,7 +51,7 @@ const likeCard = (req, res, next) => {
       if (!card) {
         return next(new myError.NotFoundError(myError.NotFoundMsg));
       }
-      return res.send({card, message: 'Лайк!'});
+      return res.send({ card, message: 'Лайк!' });
     })
     .catch(next);
 };
