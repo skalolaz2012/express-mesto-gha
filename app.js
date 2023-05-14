@@ -4,8 +4,14 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const router = require('./routes');
+const { celebrate, errors } = require('celebrate')
+
 const { login, createUser } = require('./controllers/users');
 const auth = require('./middlewares/auth');
+const {
+  validateLogin,
+  validateUser,
+} = require('./utils/validators');
 
 const app = express();
 
@@ -16,12 +22,23 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(helmet());
 
-app.post('/signin', login);
-app.post('/signup', createUser);
+app.post('/signin', celebrate(validateLogin), login);
+app.post('/signup', celebrate(validateUser), createUser);
 
 // авторизация
 app.use(auth);
-
+app.use(errors());
+app.use((err, req, res, next) => {
+  const { statusCode = 500, message } = err;
+  res
+    .status(statusCode)
+    .send({
+      // проверяем статус и выставляем сообщение в зависимости от него
+      message: statusCode === 500
+        ? 'На сервере произошла ошибка'
+        : message
+    });
+});
 app.use(router);
 
 /* прослушивание порта из первого параметра и колбэк, который выполнится при запуске приложения */

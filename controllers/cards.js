@@ -1,60 +1,57 @@
 /* экспортируем модель со схемой в контроллер */
 const Card = require('../models/card');
+const myError = require('../errors/errors');
+const { CREATED } = require('../utils/constants');
 
-const conditions = require('../utils/conditions');
+const checkCard = (card, res) => {
+  if (!card) {
+    throw new myError.NotFoundError(myError.NotFoundMsg);
+  } return res.send(card);
+}
 
-const getCards = (req, res) => {
+const getCards = (req, res, next) => {
   Card.find({})
-    .then((cards) => {
-      res.send(cards);
-    })
-    .catch((err) => {
-      conditions.sortErrors(err, res);
-    });
+    .then((cards) => res.send(cards))
+    .catch(next);
 };
 
-const createCard = (req, res) => {
+const createCard = (req, res, next) => {
   const owner = req.user._id;
   const { name, link } = req.body;
 
   Card.create({ name, link, owner })
     .then((newCard) => {
-      res.status(conditions.CREATED).send(newCard);
+      res.status(CREATED).send(newCard);
     })
     .catch((err) => {
-      conditions.sortErrors(err, res);
+      if (err.name === 'ValidationError') {
+        next(new myError.BadRequestError(myError.BadRequestMsg));
+      } next (err);
     });
 };
 
-const deleteCard = (req, res) => {
+const deleteCard = (req, res, next) => {
   const { cardId } = req.params;
 
   Card.findByIdAndRemove(cardId)
+    .orFail(new myError.NotFoundError(myError.NotFoundMsg))
     .then((card) => {
-      conditions.checkData(card, res);
+      res.send({ message: 'Удалено успешно' });
     })
-    .catch((err) => {
-      conditions.sortErrors(err, res);
-    });
+    .catch(next);
 };
 
-const likeCard = (req, res) => {
+const likeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
     { new: true },
   )
-    .orFail(new Error('DocumentNotFoundError'))
+    .orFail(new myError.NotFoundError(myError.NotFoundMsg))
     .then((card) => {
       res.send(card);
     })
-    .catch((err) => {
-      if (err.message === 'DocumentNotFoundError') {
-        res.status(404).send({ message: 'указанного id нет' });
-      } else {
-        conditions.sortErrors(err, res);
-      }
-    });
+    .catch(next);
 };
 
 const dislikeCard = (req, res) => {
@@ -63,12 +60,11 @@ const dislikeCard = (req, res) => {
     { $pull: { likes: req.user._id } }, // убрать _id из массива
     { new: true },
   )
-    .then((card) => {
-      conditions.checkData(card, res);
-    })
-    .catch((err) => {
-      conditions.sortErrors(err, res);
-    });
+  .orFail(new myError.NotFoundError(myError.NotFoundMsg))
+  .then((card) => {
+    res.send(card);
+  })
+  .catch(next);
 };
 
 module.exports = {

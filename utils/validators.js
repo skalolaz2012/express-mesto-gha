@@ -1,0 +1,98 @@
+const { Joi } = require('celebrate');
+const { pattern } = require('./constants');
+
+validateUser = {
+  body: Joi.object({
+    name: Joi.string().min(2).max(30).messages({
+      'string.min': 'Поле "Имя" не должно быть менее 2 символов',
+      'string.max': 'Поле "Имя" не должно быть более 30 символов',
+      'any.required': 'Поле "Имя" не должно быть пустым!',
+    }),
+    about: Joi.string().min(2).max(30).messages({
+      'string.min': 'Поле "О себе" не должно быть менее 2 символов',
+      'string.max': 'Поле "О себе" не должно быть более 30 символов',
+      'any.required': 'Поле "О себе" не должно быть пустым!',
+    }),
+    avatar: Joi.string().regex(pattern).message,
+    email: Joi.string().required().email().messages({
+      'string.email': 'Введите корректный email',
+      'any.required': 'Поле email не должно быть пустым!',
+    }),
+    password: Joi.string().required().min(6).messages({
+      'string.min': 'Пароль должен быть не менее 6 символов',
+      'any.required': 'Пароль не может быть пустым!',
+    }),
+  }),
+};
+
+validateEditUser = {
+  body: Joi.object({
+    name: Joi.string().min(2).max(30).messages({
+      'string.min': 'Поле "Имя" не должно быть менее 2 символов',
+      'string.max': 'Поле "Имя" не должно быть более 30 символов',
+    }),
+    about: Joi.string().min(2).max(30).messages({
+      'string.min': 'Поле "О себе" не должно быть менее 2 символов',
+      'string.max': 'Поле "О себе" не должно быть более 30 символов',
+    }),
+  }),
+};
+
+validateAvatar = {
+  body: Joi.object({
+    avatar: Joi.string().regex(pattern).message,
+  }),
+};
+
+validateUserId = {
+  params: Joi.object({
+    cardId: Joi.string().hex().length(24).messages({
+      'string.hex': 'Id указан неверно',
+    }),
+  }),
+};
+
+validateCards = {
+  body: Joi.object({
+    name: Joi.string().min(2).max(30).required().messages({
+      'string.min': 'Имя карточки не должно быть менее 2 символов',
+      'string.max': 'Имя карточки не должно быть более 30 символов',
+      'any.required': 'Имя карточки не должно быть пустым',
+    }),
+    link: Joi.string().required().regex(pattern).messages({
+      'string.regexMsg': 'Некорректная ссылка на картинку',
+      'any.required': 'Ссылка не может быть пустой',
+    }),
+  }),
+};
+
+validateCardId = {
+  params: Joi.object({
+    cardId: Joi.string().hex().length(24).messages({
+      'string.hex': 'Id указан неверно',
+    }),
+  }),
+};
+
+validateLogin = {
+  body: Joi.object({
+    email: Joi.string().required().email().messages({
+      'string.email': 'Введите корректный email',
+      'any.required': 'Поле email не должно быть пустым!',
+    }),
+    password: Joi.string().required().min(6).messages({
+      'string.min': 'Пароль должен быть не менее 6 символов',
+      'any.required': 'Пароль не может быть пустым!',
+    }),
+  }),
+};
+
+module.exports = {
+  validateUser,
+  validateEditUser,
+  validateAvatar,
+  validateUserId,
+  validateCards,
+  validateCardId,
+  validateLogin,
+};

@@ -31,12 +31,10 @@ const userSchema = new mongoose.Schema(
       validate: {
         validator: (v) => validator.isEmail(v),
       },
-      minlength: [2, 'Минимальная длина поля "name" - 2'],
-      maxlength: [30, 'Максимальная длина поля "name" - 30'],
     },
     password: {
       type: String,
-      required: [true, 'Поле "Имя" должно быть заполнено'],
+      required: [true, 'Поле "Пароль" должно быть заполнено'],
       minlength: [6, 'Минимальная длина пароля - не менее 6 символов'],
       select: false,
     },
@@ -45,23 +43,5 @@ const userSchema = new mongoose.Schema(
     versionKey: false,
   },
 );
-
-userSchema.statics.findUserByCredentials = (email, password) => { // изменил function на стрелочную
-  return this.findOne({ email })
-    .select('+password')
-    .then((user) => {
-      if (!user) {
-        return Promise.reject(new Error('Неправильные почта или пароль'));
-      }
-
-      return bcrypt.compare(password, user.password).then((matched) => {
-        if (!matched) {
-          return Promise.reject(new Error('Неправильные почта или пароль'));
-        }
-
-        return user; // теперь user доступен
-      });
-    });
-};
 
 module.exports = mongoose.model('user', userSchema);

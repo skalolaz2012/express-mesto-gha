@@ -2,99 +2,89 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 /* экспортируем модель со схемой в контроллер */
 const User = require('../models/user');
+const myError = require('../errors/errors');
+const { CREATED, jwtToken } = require('../utils/constants');
 
-const conditions = require('../utils/conditions');
+const checkUser = (user, res) => {
+  if (!user) {
+    throw new myError.NotFoundError(myError.NotFoundMsg);
+  } return res.send(user);
+}
 
-const login = (req, res) => {
+const login = (req, res, next) => {
   const { email, password } = req.body;
 
   User.findUserByCredentials(email, password)
     .then((user) => {
       // создадим токен
-      const token = jwt.sign({ _id: user._id }, 'some-very-or-not-secret-key', {
+      const token = jwt.sign({ _id: user._id }, jwtToken, {
         expiresIn: '7d',
       });
 
       // вернём токен
       res.send({ token });
     })
-    .catch((err) => {
-      // ошибка аутентификации
-      res.status(401).send({ message: err.message });
-    });
+    .catch(next);
 };
 
-const createUser = (req, res) => {
+const createUser = (req, res, next) => {
   const { name, about, avatar, email } = req.body;
-  
   bcrypt
     .hash(req.body.password, 10)
     .then((hash) =>
-      User.create({
-        name,
-        about,
-        avatar,
-        email,
-        password: hash, // записываем хеш в базу
-      })
-    )
-    .then((user) => {
-      res.status(conditions.CREATED).send(user);
+      User.create({ name, about, avatar, email, password: hash, // записываем хеш в базу
+      }),
+    ).then((user) => {
+      res.status(CREATED).send({ name, about, avatar, email });
     })
     .catch((err) => {
-      conditions.sortErrors(err, res);
+      if (err.code === 11000) {
+        next(new myError.AlreadyExistError(myError.AlreadyExistMsg));
+      } next (err);
     });
 };
 
-const getAllUsers = (req, res) => {
+const getAllUsers = (req, res, next) => {
   User.find({})
     .then((users) => {
       res.send(users);
     })
-    .catch((err) => {
-      conditions.sortErrors(err, res);
-    });
+    .catch(next);
 };
 
-const getUser = (req, res) => {
+const getUser = (req, res, next) => {
   const { userId } = req.params;
   User.findById(userId)
-    .then((user) => {
-      conditions.checkData(user, res);
-    })
-    .catch((err) => {
-      conditions.sortErrors(err, res);
-    });
+    .then((user) => checkUser(user, res))
+    .catch(next);
 };
 
-const editUser = (req, res) => {
+const getYourself = (req, res, next) => {
+  User.findById(req.user._id)
+  .then((user) => res.send(user))
+  .catch(next)
+};
+
+const editUser = (req, res, next) => {
   const { name, about } = req.body;
   User.findByIdAndUpdate(
     req.user._id,
     { name, about },
-    { new: true, runValidators: true }
+    { new: true, runValidators: true },
   )
-    .then((user) => {
-      conditions.checkData(user, res);
-    })
-    .catch((err) => {
-      conditions.sortErrors(err, res);
-    });
+  .then((user) => checkUser(user, res))
+  .catch(next);
 };
 
-const changeAvatar = (req, res) => {
+const changeAvatar = (req, res, next) => {
   const { avatar } = req.body;
   User.findByIdAndUpdate(
     req.user._id,
     { avatar },
-    { new: true, runValidators: true }
+    { new: true, runValidators: true },
   )
-    .then((user) => {
-      conditions.checkData(user, res);
-    })
-    .catch((err) => {
-      conditions.sortErrors(err, res);
-    });
+  .then((user) => checkUser(user, res))
+  .catch(next);
 };
 
 module.exports = {
@@ -102,6 +92,7 @@ module.exports = {
   createUser,
   getAllUsers,
   getUser,
+  getYourself,
   changeAvatar,
   editUser,
 };
