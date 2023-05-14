@@ -12,6 +12,7 @@ const {
   validateLogin,
   validateUser,
 } = require('./utils/validators');
+const myError = require('./errors/errors')
 
 const app = express();
 
@@ -27,20 +28,19 @@ app.post('/signup', celebrate(validateUser), createUser);
 
 // авторизация
 app.use(auth);
+app.use(router);
 app.use(errors());
-app.use((err, res, next) => {
+app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
   res
     .status(statusCode)
     .send({
-      // проверяем статус и выставляем сообщение в зависимости от него
       message: statusCode === 500
-        ? 'На сервере произошла ошибка'
+        ? myError.InternalServerMsg
         : message,
     });
   next();
 });
-app.use(router);
 
 /* прослушивание порта из первого параметра и колбэк, который выполнится при запуске приложения */
 app.listen(3000, () => {
