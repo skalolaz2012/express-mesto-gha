@@ -12,7 +12,7 @@ const {
   validateLogin,
   validateUser,
 } = require('./utils/validators');
-const myError = require('./errors/errors')
+const myError = require('./errors/errors');
 
 const app = express();
 
@@ -31,7 +31,7 @@ app.use(auth);
 app.use(router);
 app.use(errors());
 app.use((err, req, res, next) => {
-  const { statusCode = 500, message } = err;
+  const message = err.message;
   res
     .status(statusCode)
     .send({

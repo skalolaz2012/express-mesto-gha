@@ -13,7 +13,7 @@ const validateUser = {
       'string.max': 'Поле "О себе" не должно быть более 30 символов',
       'any.required': 'Поле "О себе" не должно быть пустым!',
     }),
-    avatar: Joi.string().regex(pattern).message,
+    avatar: Joi.string().regex(pattern).message('Должна быть ссылка!'),
     email: Joi.string().required().email().messages({
       'string.email': 'Введите корректный email',
       'any.required': 'Поле email не должно быть пустым!',
@@ -40,7 +40,7 @@ const validateEditUser = {
 
 const validateAvatar = {
   body: Joi.object({
-    avatar: Joi.string().regex(pattern).message,
+    avatar: Joi.string().regex(pattern).message('Должна быть ссылка!'),
   }),
 };
 
