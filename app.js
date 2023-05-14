@@ -3,7 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
-const { errors } = require('celebrate');
+const { celebrate, errors } = require('celebrate');
 
 const router = require('./routes');
 const { login, createUser } = require('./controllers/users');
