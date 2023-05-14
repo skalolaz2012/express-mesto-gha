@@ -31,11 +31,11 @@ app.use(auth);
 app.use(router);
 app.use(errors());
 app.use((err, req, res, next) => {
-  const message = err.message;
+  const { message } = err;
   res
-    .status(statusCode)
+    .status(myError.statusCode)
     .send({
-      message: statusCode === 500
+      message: myError.statusCode === 500
         ? myError.InternalServerMsg
         : message,
     });
