@@ -3,11 +3,11 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
+const auth = require('./middlewares/auth');
+const { login, createUser } = require('./controllers/auth');
 const { celebrate, errors } = require('celebrate');
 
-const router = require('./routes');
-const { login, createUser } = require('./controllers/users');
-const auth = require('./middlewares/auth');
+const router = require('express').Router();
 const {
   validateLogin,
   validateUser,
@@ -27,7 +27,11 @@ app.post('/signin', celebrate(validateLogin), login);
 app.post('/signup', celebrate(validateUser), createUser);
 
 // авторизация
-app.use(auth);
+app.use('/users', auth, require('./routes/users'));
+app.use('/cards', auth, require('./routes/cards'));
+app.use('*', (req, res) => {
+  res.send({ message: 'запрашиваемой страницы не существует' }, 404);
+});
 app.use(router);
 app.use(errors());
 app.use((err, req, res, next) => {

@@ -2,21 +2,21 @@ const usersRouter = require('express').Router();
 const { celebrate } = require('celebrate');
 
 const {
+  validateUserId,
   validateEditUser,
   validateAvatar,
-  validateUserId,
 } = require('../utils/validators');
 const {
   getAllUsers,
-  getUser,
   getYourself,
+  getUser,
   editUser,
   changeAvatar,
 } = require('../controllers/users');
 
 usersRouter.get('/', getAllUsers);
-usersRouter.get('/:userId', celebrate(validateUserId), getUser);
 usersRouter.get('/me', getYourself);
+usersRouter.get('/:userId', celebrate(validateUserId), getUser);
 usersRouter.patch('/me', celebrate(validateEditUser), editUser);
 usersRouter.patch('/me/avatar', celebrate(validateAvatar), changeAvatar);
 
