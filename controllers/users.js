@@ -37,11 +37,13 @@ const login = (req, res, next) => {
 
 const createUser = (req, res, next) => {
   const {
-    name, about, avatar, email
+    name, about, avatar, email,
   } = req.body;
   bcrypt
     .hash(req.body.password, 10)
-    .then((hash) => User.create({ name, about, avatar, email, password: hash, }))
+    .then((hash) => User.create({
+      name, about, avatar, email, password: hash,
+    }))
     .then((user) => {
       res.status(CREATED).send({
         name: user.name,
