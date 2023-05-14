@@ -8,8 +8,9 @@ const { CREATED, jwtToken } = require('../utils/constants');
 const checkUser = (user, res) => {
   if (!user) {
     throw new myError.NotFoundError(myError.NotFoundMsg);
-  } return res.send(user);
-}
+  }
+  return res.send(user);
+};
 
 const login = (req, res, next) => {
   const { email, password } = req.body;
@@ -31,16 +32,15 @@ const createUser = (req, res, next) => {
   const { name, about, avatar, email } = req.body;
   bcrypt
     .hash(req.body.password, 10)
-    .then((hash) =>
-      User.create({ name, about, avatar, email, password: hash, // записываем хеш в базу
-      }),
-    ).then((user) => {
+    .then((hash) => User.create({ name, about, avatar, email, password: hash }))
+    .then((user) => {
       res.status(CREATED).send({ name, about, avatar, email });
     })
     .catch((err) => {
       if (err.code === 11000) {
         next(new myError.AlreadyExistError(myError.AlreadyExistMsg));
-      } next (err);
+      }
+      next(err);
     });
 };
 
@@ -61,8 +61,8 @@ const getUser = (req, res, next) => {
 
 const getYourself = (req, res, next) => {
   User.findById(req.user._id)
-  .then((user) => res.send(user))
-  .catch(next)
+    .then((user) => res.send(user))
+    .catch(next);
 };
 
 const editUser = (req, res, next) => {
@@ -70,10 +70,10 @@ const editUser = (req, res, next) => {
   User.findByIdAndUpdate(
     req.user._id,
     { name, about },
-    { new: true, runValidators: true },
+    { new: true, runValidators: true }
   )
-  .then((user) => checkUser(user, res))
-  .catch(next);
+    .then((user) => checkUser(user, res))
+    .catch(next);
 };
 
 const changeAvatar = (req, res, next) => {
@@ -81,10 +81,10 @@ const changeAvatar = (req, res, next) => {
   User.findByIdAndUpdate(
     req.user._id,
     { avatar },
-    { new: true, runValidators: true },
+    { new: true, runValidators: true }
   )
-  .then((user) => checkUser(user, res))
-  .catch(next);
+    .then((user) => checkUser(user, res))
+    .catch(next);
 };
 
 module.exports = {

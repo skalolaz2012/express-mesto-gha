@@ -3,9 +3,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
-const router = require('./routes');
-const { celebrate, errors } = require('celebrate')
+const { celebrate, errors } = require('celebrate');
 
+const router = require('./routes');
 const { login, createUser } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const {
@@ -28,7 +28,7 @@ app.post('/signup', celebrate(validateUser), createUser);
 // авторизация
 app.use(auth);
 app.use(errors());
-app.use((err, req, res, next) => {
+app.use((err, res, next) => {
   const { statusCode = 500, message } = err;
   res
     .status(statusCode)
@@ -36,8 +36,9 @@ app.use((err, req, res, next) => {
       // проверяем статус и выставляем сообщение в зависимости от него
       message: statusCode === 500
         ? 'На сервере произошла ошибка'
-        : message
+        : message,
     });
+    next();
 });
 app.use(router);
 

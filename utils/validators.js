@@ -1,7 +1,7 @@
 const { Joi } = require('celebrate');
 const { pattern } = require('./constants');
 
-validateUser = {
+const validateUser = {
   body: Joi.object({
     name: Joi.string().min(2).max(30).messages({
       'string.min': 'Поле "Имя" не должно быть менее 2 символов',
@@ -25,7 +25,7 @@ validateUser = {
   }),
 };
 
-validateEditUser = {
+const validateEditUser = {
   body: Joi.object({
     name: Joi.string().min(2).max(30).messages({
       'string.min': 'Поле "Имя" не должно быть менее 2 символов',
@@ -38,13 +38,13 @@ validateEditUser = {
   }),
 };
 
-validateAvatar = {
+const validateAvatar = {
   body: Joi.object({
     avatar: Joi.string().regex(pattern).message,
   }),
 };
 
-validateUserId = {
+const validateUserId = {
   params: Joi.object({
     cardId: Joi.string().hex().length(24).messages({
       'string.hex': 'Id указан неверно',
@@ -52,9 +52,10 @@ validateUserId = {
   }),
 };
 
-validateCards = {
+const validateCards = {
   body: Joi.object({
-    name: Joi.string().min(2).max(30).required().messages({
+    name: Joi.string().min(2).max(30).required()
+    .messages({
       'string.min': 'Имя карточки не должно быть менее 2 символов',
       'string.max': 'Имя карточки не должно быть более 30 символов',
       'any.required': 'Имя карточки не должно быть пустым',
@@ -66,7 +67,7 @@ validateCards = {
   }),
 };
 
-validateCardId = {
+const validateCardId = {
   params: Joi.object({
     cardId: Joi.string().hex().length(24).messages({
       'string.hex': 'Id указан неверно',
@@ -74,7 +75,7 @@ validateCardId = {
   }),
 };
 
-validateLogin = {
+const validateLogin = {
   body: Joi.object({
     email: Joi.string().required().email().messages({
       'string.email': 'Введите корректный email',

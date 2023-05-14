@@ -3,12 +3,6 @@ const Card = require('../models/card');
 const myError = require('../errors/errors');
 const { CREATED } = require('../utils/constants');
 
-const checkCard = (card, res) => {
-  if (!card) {
-    throw new myError.NotFoundError(myError.NotFoundMsg);
-  } return res.send(card);
-}
-
 const getCards = (req, res, next) => {
   Card.find({})
     .then((cards) => res.send(cards))
@@ -26,7 +20,8 @@ const createCard = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new myError.BadRequestError(myError.BadRequestMsg));
-      } next (err);
+      }
+    next(err);
     });
 };
 
@@ -35,7 +30,7 @@ const deleteCard = (req, res, next) => {
 
   Card.findByIdAndRemove(cardId)
     .orFail(new myError.NotFoundError(myError.NotFoundMsg))
-    .then((card) => {
+    .then(() => {
       res.send({ message: 'Удалено успешно' });
     })
     .catch(next);
@@ -54,17 +49,17 @@ const likeCard = (req, res, next) => {
     .catch(next);
 };
 
-const dislikeCard = (req, res) => {
+const dislikeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $pull: { likes: req.user._id } }, // убрать _id из массива
     { new: true },
   )
-  .orFail(new myError.NotFoundError(myError.NotFoundMsg))
-  .then((card) => {
-    res.send(card);
-  })
-  .catch(next);
+    .orFail(new myError.NotFoundError(myError.NotFoundMsg))
+    .then((card) => {
+      res.send(card);
+    })
+    .catch(next);
 };
 
 module.exports = {
