@@ -4,7 +4,7 @@ const myError = require('../errors/errors');
 
 const checkUser = (user, res) => {
   if (!user) {
-    throw new myError.NotFoundError(myError.NotFoundMsg);
+    throw new myError.NotFoundError('id нет');
   }
   return res.send(user);
 };
@@ -17,10 +17,15 @@ const getAllUsers = (req, res, next) => {
     .catch(next);
 };
 
-const getUser = (req, res, next) => {
+const getUserById = (req, res, next) => {
   const { userId } = req.params;
   User.findById(userId)
-    .then((user) => checkUser(user, res))
+    .then((user) => {
+      if (!user) {
+      throw new myError.NotFoundError('id нет');
+    }
+    return res.send(user);
+  })
     .catch(next);
 };
 
@@ -54,7 +59,7 @@ const changeAvatar = (req, res, next) => {
 
 module.exports = {
   getAllUsers,
-  getUser,
+  getUserById,
   getYourself,
   changeAvatar,
   editUser,

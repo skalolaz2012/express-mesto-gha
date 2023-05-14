@@ -46,9 +46,7 @@ const validateAvatar = {
 
 const validateUserId = {
   params: Joi.object({
-    cardId: Joi.string().hex().length(24).messages({
-      'string.hex': 'Id указан неверно',
-    }),
+    userId: Joi.string().hex().length(24).message('Id указан неверно'),
   }),
 };
 
