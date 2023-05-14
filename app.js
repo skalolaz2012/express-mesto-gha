@@ -38,7 +38,7 @@ app.use((err, res, next) => {
         ? 'На сервере произошла ошибка'
         : message,
     });
-    next();
+  next();
 });
 app.use(router);
 

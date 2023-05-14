@@ -21,7 +21,7 @@ const createCard = (req, res, next) => {
       if (err.name === 'ValidationError') {
         next(new myError.BadRequestError(myError.BadRequestMsg));
       }
-    next(err);
+      next(err);
     });
 };
 

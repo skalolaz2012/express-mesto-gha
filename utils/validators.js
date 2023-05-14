@@ -55,11 +55,11 @@ const validateUserId = {
 const validateCards = {
   body: Joi.object({
     name: Joi.string().min(2).max(30).required()
-    .messages({
-      'string.min': 'Имя карточки не должно быть менее 2 символов',
-      'string.max': 'Имя карточки не должно быть более 30 символов',
-      'any.required': 'Имя карточки не должно быть пустым',
-    }),
+      .messages({
+        'string.min': 'Имя карточки не должно быть менее 2 символов',
+        'string.max': 'Имя карточки не должно быть более 30 символов',
+        'any.required': 'Имя карточки не должно быть пустым',
+      }),
     link: Joi.string().required().regex(pattern).messages({
       'string.regexMsg': 'Некорректная ссылка на картинку',
       'any.required': 'Ссылка не может быть пустой',
