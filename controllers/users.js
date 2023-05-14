@@ -15,37 +15,46 @@ const checkUser = (user, res) => {
 const login = (req, res, next) => {
   const { email, password } = req.body;
 
-  User.findUserByCredentials(email, password)
+  User.findOne({ email })
+    .select('+password')
     .then((user) => {
-      // создадим токен
-      const token = jwt.sign({ _id: user._id }, jwtToken, {
-        expiresIn: '7d',
+      if (!user) {
+        throw new myError.AuthError(myError.AuthMsg);
+      }
+      return bcrypt.compare(password, user.password).then((matched) => {
+        if (!matched) {
+          next(new myError.AuthError(myError.AuthMsg));
+        }
+        const token = jwt.sign({ _id: user._id }, jwtToken, {
+          expiresIn: '7d',
+        });
+        // вернём токен
+        res.send({ token });
       });
-
-      // вернём токен
-      res.send({ token });
     })
     .catch(next);
 };
 
 const createUser = (req, res, next) => {
-  const {
-    name, about, avatar, email,
-  } = req.body;
+  const { name, about, avatar, email } = req.body;
   bcrypt
     .hash(req.body.password, 10)
-    .then((hash) => User.create({
-      name, about, avatar, email, password: hash,
-    }))
+    .then((hash) =>
+      User.create({
+        name,
+        about,
+        avatar,
+        email,
+        password: hash,
+      })
+    )
     .then((user) => {
-      res
-        .status(CREATED)
-        .send({
-          name: user.name,
-          about: user.about,
-          avatar: user.avatar,
-          email: user.email,
-        });
+      res.status(CREATED).send({
+        name: user.name,
+        about: user.about,
+        avatar: user.avatar,
+        email: user.email,
+      });
     })
     .catch((err) => {
       if (err.code === 11000) {
@@ -81,7 +90,7 @@ const editUser = (req, res, next) => {
   User.findByIdAndUpdate(
     req.user._id,
     { name, about },
-    { new: true, runValidators: true },
+    { new: true, runValidators: true }
   )
     .then((user) => checkUser(user, res))
     .catch(next);
@@ -92,7 +101,7 @@ const changeAvatar = (req, res, next) => {
   User.findByIdAndUpdate(
     req.user._id,
     { avatar },
-    { new: true, runValidators: true },
+    { new: true, runValidators: true }
   )
     .then((user) => checkUser(user, res))
     .catch(next);

@@ -1,4 +1,4 @@
-const AuthMsg = 'Необходима авторизация';
+const AuthMsg = 'Неверная почта или пароль';
 
 class AuthError extends Error {
   constructor(message) {
