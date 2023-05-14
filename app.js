@@ -3,7 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
-const { celebrate, errors } = require('celebrate');
+const { errors } = require('celebrate');
 
 const router = require('./routes');
 const { login, createUser } = require('./controllers/users');
@@ -23,8 +23,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(helmet());
 
-app.post('/signin', celebrate(validateLogin), login);
-app.post('/signup', celebrate(validateUser), createUser);
+app.post('/signin', validateLogin, login);
+app.post('/signup', validateUser, createUser);
 
 // авторизация
 app.use(auth);
