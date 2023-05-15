@@ -4,7 +4,7 @@ const myError = require('../errors/errors');
 
 const checkUser = (user, res) => {
   if (!user) {
-    throw new myError.NotFoundError('id нет');
+    throw new myError.NotFoundError(myError.NotFoundMsg);
   }
   return res.send(user);
 };
@@ -22,7 +22,7 @@ const getUserById = (req, res, next) => {
   User.findById(userId)
     .then((user) => {
       if (!user) {
-        throw new myError.NotFoundError('id нет');
+        throw new myError.NotFoundError(myError.NotFoundMsg);
       }
       return res.send(user);
     })
@@ -31,6 +31,9 @@ const getUserById = (req, res, next) => {
 
 const getYourself = (req, res, next) => {
   User.findById(req.user._id)
+    .orFail(() => {
+      throw new myError.NotFoundError(myError.NotFoundMsg);
+    })
     .then((user) => res.send({ user }))
     .catch(next);
 };

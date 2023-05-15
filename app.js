@@ -13,6 +13,7 @@ const {
   validateUser,
 } = require('./utils/validators');
 const myError = require('./errors/errors');
+const defaultError = require('./middlewares/defaultError');
 
 const app = express();
 
@@ -31,22 +32,12 @@ app.use('/users', auth, require('./routes/users'));
 
 app.use('/cards', auth, require('./routes/cards'));
 
+app.use(router);
 app.use('*', (req, res) => {
   res.send({ message: 'запрашиваемой страницы не существует' }, 404);
-});
-app.use(router);
+}); // несуществующий роут всегда должен быть после остальных роутов в конце
 app.use(errors());
-app.use((err, req, res, next) => {
-  const { statusCode = 500, message } = err;
-  res
-    .status(statusCode)
-    .send({
-      message: statusCode === 500
-        ? myError.InternalServerMsg
-        : message,
-    });
-  next();
-});
+app.use(defaultError);
 
 /* прослушивание порта из первого параметра и колбэк, который выполнится при запуске приложения */
 app.listen(3000, () => {

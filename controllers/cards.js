@@ -31,7 +31,7 @@ const deleteCard = (req, res, next) => {
   Card.findByIdAndRemove(cardId)
     .then((card) => {
       if (!card) {
-        next(new myError.NotFoundError(myError.NotFoundMsg));
+        return next(new myError.NotFoundError(myError.NotFoundMsg));
       } else if (!card.owner.equals(req.user._id)) {
         return next(new myError.ForbiddenError(myError.ForbiddenMsg));
       }
@@ -48,10 +48,7 @@ const likeCard = (req, res, next) => {
   )
     .orFail(() => new myError.NotFoundError(myError.NotFoundMsg))
     .then((card) => {
-      if (!card) {
-        return next(new myError.NotFoundError(myError.NotFoundMsg));
-      }
-      return res.send({ card, message: 'Лайк!' });
+      res.send({ card, message: 'Лайк!' });
     })
     .catch(next);
 };

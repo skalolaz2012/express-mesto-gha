@@ -1,5 +1,5 @@
-const pattern = /^(http|https):\/\/[^ "<>#%]+\.[^ "<>#%]+[^ "<>#%]+#?/;
+const urlLinkPattern = /^(http|https):\/\/[^ "<>#%]+\.[^ "<>#%]+[^ "<>#%]+#?/;
 
 module.exports = {
-  pattern,
+  urlLinkPattern,
 };

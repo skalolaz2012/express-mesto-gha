@@ -1,5 +1,5 @@
 const { Joi } = require('celebrate');
-const { pattern } = require('./constants');
+const { urlLinkPattern } = require('./constants');
 
 const validateUser = {
   body: Joi.object().keys({
@@ -13,7 +13,7 @@ const validateUser = {
       'string.max': 'Поле "О себе" не должно быть более 30 символов',
       'any.required': 'Поле "О себе" не должно быть пустым!',
     }),
-    avatar: Joi.string().regex(pattern).message('Должна быть ссылка!'),
+    avatar: Joi.string().regex(urlLinkPattern).message('Должна быть ссылка!'),
     email: Joi.string().required().email().messages({
       'string.email': 'Введите корректный email',
       'any.required': 'Поле email не должно быть пустым!',
@@ -40,7 +40,7 @@ const validateEditUser = {
 
 const validateAvatar = {
   body: Joi.object({
-    avatar: Joi.string().regex(pattern).message('Должна быть ссылка!'),
+    avatar: Joi.string().regex(urlLinkPattern).message('Должна быть ссылка!'),
   }),
 };
 
@@ -58,7 +58,7 @@ const validateCards = {
         'string.max': 'Имя карточки не должно быть более 30 символов',
         'any.required': 'Имя карточки не должно быть пустым',
       }),
-    link: Joi.string().required().regex(pattern).messages({
+    link: Joi.string().required().regex(urlLinkPattern).messages({
       'string.regexMsg': 'Некорректная ссылка на картинку',
       'any.required': 'Ссылка не может быть пустой',
     }),
@@ -67,9 +67,7 @@ const validateCards = {
 
 const validateCardId = {
   params: Joi.object({
-    cardId: Joi.string().hex().length(24).messages({
-      'string.hex': 'Id указан неверно',
-    }),
+    cardId: Joi.string().hex().length(24).message('Id указан неверно'),
   }),
 };
 

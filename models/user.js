@@ -45,17 +45,17 @@ const userSchema = new mongoose.Schema(
   },
 );
 
-userSchema.statics.findUserByCredentials = function (email, password, next) {
+userSchema.statics.findUserByCredentials = function (email, password) {
   return this.findOne({ email })
     .select('+password')
     .then((user) => {
       if (!user) {
-        return next(new myError.AuthError('Неправильные почта или пароль'));
+        return Promise.reject(new myError.AuthError('Неправильные почта или пароль'));
       }
 
       return bcrypt.compare(password, user.password).then((matched) => {
         if (!matched) {
-          return next(new myError.AuthError('Неправильные почта или пароль'));
+          return Promise.reject(new myError.AuthError('Неправильные почта или пароль'));
         }
 
         return user; // теперь user доступен
