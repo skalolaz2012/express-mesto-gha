@@ -32,7 +32,7 @@ const deleteCard = (req, res, next) => {
     .then((card) => {
       if (!card) {
         return next(new myError.NotFoundError(myError.NotFoundMsg));
-      } else if (!card.owner.equals(req.user._id)) {
+      } if (!card.owner.equals(req.user._id)) {
         return next(new myError.ForbiddenError(myError.ForbiddenMsg));
       }
       return res.send({ message: 'Удалено успешно' });

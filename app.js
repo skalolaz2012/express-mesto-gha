@@ -12,7 +12,6 @@ const {
   validateLogin,
   validateUser,
 } = require('./utils/validators');
-const myError = require('./errors/errors');
 const defaultError = require('./middlewares/defaultError');
 
 const app = express();
